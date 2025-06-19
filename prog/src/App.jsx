@@ -1,9 +1,15 @@
 import { useState } from 'react'
-import FormTarea from './FormTarea'
-function App() {
-  const [count, setCount] = useState(0)
+import FormTarea from './FormTarea';
+import FormTarea from './ListaTarea';
 
-  return (
+function App() {
+const [tareas, setTareas] = useState([]);
+const guardarTarea = (tarea) => {
+  const nuevaTarea = {
+    id: Date
+  }
+}
+return (
     <>
       <div>
         <a href="https://vite.dev" target="_blank">
