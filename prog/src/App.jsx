@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import FormTarea from './FormTarea';
-import FormTarea from './ListaTarea';
-
+import FormTarea from './componentes/Formulario';
+import FormTarea from './componentes/ListaTarea';
+import FiltrarCategoria from './componentes/FiltrarCategoria'
 function App() {
   const [tareas, setTareas] = useState([]);
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState("todas");
