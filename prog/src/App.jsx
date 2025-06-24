@@ -1,45 +1,39 @@
-import { useState } from 'react'
-import FormTarea from './componentes/Formulario';
-import FormTarea from './componentes/ListaTarea';
-import FiltrarCategoria from './componentes/FiltrarCategoria'
+import React, { useState } from "react";
+import FormTarea from "./componentes/FormTarea";
+import ListaTarea from "./componentes/ListaTarea";
+import FiltrarCat from "./componentes/FiltrarCat";
+
 function App() {
   const [tareas, setTareas] = useState([]);
-  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState("todas");
+  const [categoria, setCategoria] = useState("Todas");
 
-  const guardarTarea = (tarea) => {
-    const nueva = {
-      ...tarea,
-      id: Date.now(),
-      estado: "Pendiente"
-    };
+  function agregarTarea(nueva) {
     setTareas([...tareas, nueva]);
-  };
-  const eliminarTarea = (id) => {
-    setTareas(tareas.filter((t) => t.id !== id));
-  };
-  const cambiarEstado = (id) => {
-    setTareas(
-      tareas.map((t) =>
-       t.id === id
-         ? { ...t, estado:  t.estado === "Pendiente" ? "Completada" : "Pendiente"}
-         :t
-      )
-    );
-  };
-  const tareasFiltradas =
-    categoriaSeleccionada === "todas"
+  }
+
+  function borrarTarea(id) {
+    setTareas(tareas.filter(t => t.id !== id));
+  }
+
+  function cambiarEstado(id) {
+    setTareas(tareas.map(t => t.id === id ? { ...t, estado: !t.estado } : t));
+  }
+
+  const tareasFiltradas = categoria === "Todas"
     ? tareas
-    : tareas.filter((t)=> t.categoria ===categoriaSeleccionada);
+    : tareas.filter(t => t.categoria === categoria);
+
   return (
-    <div>
-      <FormTarea guardarTarea={guardarTarea}/>
-      <FiltrarCategoria setCategoriaSeleccionada={setCategoriaSeleccionada}/>
-      <ListaTarea
-        tareas={tareasFiltradas}
-        eliminarTarea={eliminarTarea}
-        cambiarEstado={cambiarEstado}
+    <>
+      <FormTarea guardar={agregarTarea} />
+      <FiltrarCat seleccionar={setCategoria} />
+      <ListaTarea 
+        tareas={tareasFiltradas} 
+        eliminar={borrarTarea} 
+        cambiar={cambiarEstado} 
       />
-    </div>
+    </>
   );
 }
+
 export default App;
