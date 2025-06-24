@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import FormTarea from "./componentes/FormTarea";
 import ListaTarea from "./componentes/ListaTarea";
 import FiltrarCat from "./componentes/FiltrarCat";
+import "./index.css";
 
 function App() {
   const [tareas, setTareas] = useState([]);
@@ -16,12 +17,24 @@ function App() {
   }
 
   function cambiarEstado(id) {
-    setTareas(tareas.map(t => t.id === id ? { ...t, estado: !t.estado } : t));
+    setTareas(tareas.map(t => {
+      if (t.id === id) {
+        let nuevoEstado;
+        if (t.estado === "Pendiente") nuevoEstado = "En proceso";
+        else if (t.estado === "En proceso") nuevoEstado = "Completada";
+        else nuevoEstado = "Pendiente";
+        return { ...t, estado: nuevoEstado };
+      }
+      return t;
+    }));
   }
 
-  const tareasFiltradas = categoria === "Todas"
+  const prioridadValor = { Alta: 1, Media: 2, Baja: 3 };
+
+  const tareasFiltradas = (categoria === "Todas"
     ? tareas
-    : tareas.filter(t => t.categoria === categoria);
+    : tareas.filter(t => t.categoria === categoria)
+  ).sort((a, b) => prioridadValor[a.prioridad] - prioridadValor[b.prioridad]);
 
   return (
     <>
