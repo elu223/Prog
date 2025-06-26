@@ -1,35 +1,53 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from "react";
+import FormTarea from "./componentes/FormTarea";
+import ListaTarea from "./componentes/ListaTarea";
+import FiltrarCat from "./componentes/FiltrarCat";
+import "./index.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [tareas, setTareas] = useState([]);//arreglo tareas inicialmente vacio
+  const [categoria, setCategoria] = useState("Todas");
 
-  return (
+  function agregarTarea(nueva) {
+    setTareas([...tareas, nueva]);
+  }
+
+  function borrarTarea(id) {
+    
+    setTareas(tareas.filter(t => t.id !== id));//elimina la tarea con el id especificado del arreglo tareas
+  }
+
+  function cambiarEstado(id) {
+    setTareas(tareas.map(t => {
+      if (t.id === id) {
+        let nuevoEstado;
+        if (t.estado === "Pendiente") nuevoEstado = "En proceso";
+        else if (t.estado === "En proceso") nuevoEstado = "Completada";
+        else nuevoEstado = "Pendiente";
+        return { ...t, estado: nuevoEstado };
+      }
+      return t;//Cambia el estado de la tarea segun su id ciclando entre "Pendiente", etc
+    }));
+  }
+
+  const prioridadValor = { Alta: 1, Media: 2, Baja: 3 };//asigna valores num para ordenarlas
+
+  const tareasFiltradas = (categoria === "Todas"
+    ? tareas
+    : tareas.filter(t => t.categoria === categoria)
+  ).sort((a, b) => prioridadValor[a.prioridad] - prioridadValor[b.prioridad]);//Filtra tareas por categoria selec y las ordena segun su prioridad
+
+  return (//3 componentes con las props
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <FormTarea guardar={agregarTarea} />
+      <FiltrarCat seleccionar={setCategoria} />
+      <ListaTarea 
+        tareas={tareasFiltradas} 
+        eliminar={borrarTarea} 
+        cambiar={cambiarEstado} 
+      />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
