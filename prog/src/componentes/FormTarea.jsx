@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from "react";//impota useState para manejar estados locales
 
 function FormTarea({ guardar }) {
   const [texto, setTexto] = useState("");
@@ -7,7 +7,7 @@ function FormTarea({ guardar }) {
   function crearTarea() {
     if (texto.trim() === "") return;
 
-    const nueva = {
+    const nueva = { //Crea un objeto tarea 
       id: Date.now(),
       titulo: texto,
       prioridad: prioridad,
@@ -15,11 +15,11 @@ function FormTarea({ guardar }) {
       estado: "Pendiente"
     };
 
-    guardar(nueva);
+    guardar(nueva); //llama la funcion para agregar la tarea al estado principal y limpia el input
     setTexto("");
   }
 
-  return (
+  return (//Renderiza el formulario con input para texto, selec para categoria y select para prioridad y btn para crear tarea
     <div id="formTarea">
       <div className="formulario">
         <input
